@@ -8,6 +8,7 @@
 #include <QPixmap>
 #include <QImageReader>
 #include <QObject>
+#include "ai-picture.h"
 
 // For UI init
 class UI : public QObject
@@ -25,6 +26,10 @@ private:
     QPixmap* _imageSource;
 
     QString* _imagePath;
+
+    QPushButton* _openAIGeneration;
+
+    AIPicture* _pictureWriter;
 
 public:
     UI(QWidget* widget);

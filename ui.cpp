@@ -24,6 +24,13 @@ UI::UI(QWidget* widget)
     this->_image->show();
 
     this->_imagePath = new QString();
+
+    this->_pictureWriter = new AIPicture(this->_mainWindow);
+
+    this->_openAIGeneration = new QPushButton("AI Generation", this->_mainWindow);
+    this->_openAIGeneration->move(850, 150);
+    connect(this->_openAIGeneration, SIGNAL(clicked()), this->_pictureWriter, SLOT(ShowWindow()));
+    this->_openAIGeneration->show();
 }
 
 void UI::OpenFileClick()
