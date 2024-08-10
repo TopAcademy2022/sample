@@ -7,19 +7,23 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 #include <QNetworkReply>
+#include "dialog-ai.h"
 
 class AIPicture : public QObject
 {
     Q_OBJECT
 private:
+    QWidget* _mainWindow;
+
     QNetworkAccessManager* _networkManager;
+
+    DialogAI* _dialogAI;
 
     void GetGeneratedPictureUrl(QString textForGeneration);
 
+    void ClosedWindow(char* text);
 public:
     explicit AIPicture(QWidget* mainWindow, QObject *parent = nullptr);
-
-    QWidget* _mainWindow;
 
 public slots:
     void ShowWindow();

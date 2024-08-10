@@ -6,7 +6,7 @@ void AIPicture::GetGeneratedPictureUrl(QString textForGeneration)
     reqToAPIGenerator.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     reqToAPIGenerator.setRawHeader("X-Api-Version", "1.0");
     reqToAPIGenerator.setRawHeader("Accept", "application/json");
-    reqToAPIGenerator.setRawHeader("Authorization", "Bearer lmwr_sk_EtNWniOCno_jTCnRQabz4cCPaWQ7MmngaaRuUEma35pZjPJu");
+    reqToAPIGenerator.setRawHeader("Authorization", "Bearer lmwr_sk_gXmrJdPFjs_s9MzUYxJyu1V4NxAyRPKvz5VPf0FVbSE39Odm");
 
     QJsonObject requestText = QJsonObject();
     requestText.insert("prompt", textForGeneration);
@@ -23,6 +23,9 @@ AIPicture::AIPicture(QWidget* mainWindow, QObject *parent)
     this->_mainWindow = mainWindow;
     this->_networkManager = new QNetworkAccessManager(this);
 
+    this->_dialogAI = new DialogAI((void(*)(char* text))&this->ClosedWindow, this->_mainWindow);
+
+
     QObject::connect(this->_networkManager, &QNetworkAccessManager::finished,
         this, [=](QNetworkReply *reply)
         {
@@ -34,15 +37,18 @@ AIPicture::AIPicture(QWidget* mainWindow, QObject *parent)
             }
 
             QJsonObject resultJson = QJsonDocument::fromJson(reply->readAll()).object();
-            qDebug() << resultJson["asset_url"].toString();
+            qDebug() << reply->readAll();
+            qDebug() << resultJson;
         }
     );
 }
 
 void AIPicture::ShowWindow()
 {
-    QDialog* _dialog = new QDialog(this->_mainWindow);
-    _dialog->show();
+    this->_dialogAI->show();
+}
 
-    this->GetGeneratedPictureUrl("One student in teacher class");
+void AIPicture::ClosedWindow(char* text)
+{
+    this->GetGeneratedPictureUrl(QString(text));
 }
